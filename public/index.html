@@ -9,14 +9,18 @@
 <body>
   <!-- Browser compatibility banner -->
   <div id="browser-warning" class="browser-warning" hidden>
-    Web Serial API není podporováno ve vašem prohlížeči. Použijte prosím <strong>Chrome 89+</strong> nebo <strong>Edge 89+</strong>.
+    <span data-i18n="browser_warning"></span> <strong>Chrome 89+</strong> <span data-i18n="browser_warning_or"></span> <strong>Edge 89+</strong>.
   </div>
 
   <header>
     <h1>ESP32 Web Tool</h1>
+    <select id="lang-select" class="lang-select" aria-label="Language">
+      <option value="cs">CS</option>
+      <option value="en">EN</option>
+    </select>
     <div id="connection-status" class="connection-status disconnected">
       <span class="status-dot"></span>
-      <span id="connection-text">Odpojeno</span>
+      <span id="connection-text" data-i18n="status_disconnected">Odpojeno</span>
     </div>
   </header>
 
@@ -30,17 +34,17 @@
     <section id="tab-flash" class="tab-content active">
       <div class="flash-controls">
         <div class="form-group">
-          <label for="firmware-select">Firmware</label>
+          <label for="firmware-select" data-i18n="label_firmware">Firmware</label>
           <select id="firmware-select" disabled>
-            <option value="">Načítání...</option>
+            <option value="" data-i18n="loading">Načítání...</option>
           </select>
         </div>
 
         <div id="firmware-description" class="firmware-description" hidden></div>
 
         <div class="button-row">
-          <button id="connect-flash-btn" class="btn btn-primary">Připojit ESP32</button>
-          <button id="flash-btn" class="btn btn-success" disabled>Nahrát firmware</button>
+          <button id="connect-flash-btn" class="btn btn-primary" data-i18n="btn_connect_flash">Připojit ESP32</button>
+          <button id="flash-btn" class="btn btn-success" disabled data-i18n="btn_flash">Nahrát firmware</button>
         </div>
 
         <div class="progress-container" hidden id="flash-progress-container">
@@ -59,7 +63,7 @@
       <div class="monitor-controls">
         <div class="monitor-controls-row">
           <div class="form-group">
-            <label for="baud-rate">Baud rate</label>
+            <label for="baud-rate" data-i18n="label_baud_rate">Baud rate</label>
             <select id="baud-rate">
               <option value="9600">9600</option>
               <option value="19200">19200</option>
@@ -73,26 +77,27 @@
           </div>
 
           <div class="form-group">
-            <label for="line-ending">Konec řádku</label>
+            <label for="line-ending" data-i18n="label_line_ending">Konec řádku</label>
             <select id="line-ending">
               <option value="\n" selected>LF (\n)</option>
               <option value="\r\n">CRLF (\r\n)</option>
               <option value="\r">CR (\r)</option>
-              <option value="">Žádné</option>
+              <option value="" data-i18n="line_ending_none">Žádné</option>
             </select>
           </div>
 
-          <button id="connect-monitor-btn" class="btn btn-primary">Připojit</button>
-          <button id="clear-monitor-btn" class="btn btn-secondary">Vymazat</button>
-          <button id="copy-monitor-btn" class="btn btn-secondary">Kopírovat vše</button>
+          <button id="connect-monitor-btn" class="btn btn-primary" data-i18n="btn_connect_monitor">Připojit</button>
+          <button id="clear-monitor-btn" class="btn btn-secondary" data-i18n="btn_clear">Vymazat</button>
+          <button id="copy-monitor-btn" class="btn btn-secondary" data-i18n="btn_copy_all">Kopírovat vše</button>
         </div>
       </div>
 
       <div class="console-output" id="monitor-output"></div>
 
       <div class="input-row">
-        <input type="text" id="monitor-input" placeholder="Zadejte příkaz..." disabled>
-        <button id="send-btn" class="btn btn-primary" disabled>Odeslat</button>
+        <input type="text" id="monitor-input" placeholder="Zadejte příkaz..." disabled
+               data-i18n-placeholder="placeholder_command">
+        <button id="send-btn" class="btn btn-primary" disabled data-i18n="btn_send">Odeslat</button>
       </div>
     </section>
   </main>

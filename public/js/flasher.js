@@ -1,4 +1,5 @@
 import { ESPLoader, Transport } from '../lib/esptool-bundle.js';
+import { t } from './i18n.js';
 
 /**
  * Flasher - wraps esptool-js for firmware flashing.
@@ -27,7 +28,7 @@ export class Flasher {
       onStatus?.('connecting');
 
       // Create transport from raw port
-      log('Vytváření transportu...', 'info');
+      log(t('flash_creating_transport'), 'info');
       this._transport = new Transport(port, true);
 
       // Create ESPLoader
@@ -45,26 +46,26 @@ export class Flasher {
       this._esploader = new ESPLoader(flashOptions);
 
       // Connect and detect chip
-      log('Připojování k ESP32...', 'info');
+      log(t('flash_connecting'), 'info');
       const chipName = await this._esploader.main();
-      log(`Detekován čip: ${chipName}`, 'success');
+      log(t('flash_chip_detected', { chipName }), 'success');
 
       // Chip mismatch warning
       if (firmware.chip && chipName && !chipName.toUpperCase().includes(firmware.chip.toUpperCase().replace('ESP32-', 'ESP32'))) {
         const normalizedChip = firmware.chip.toUpperCase();
         const normalizedDetected = chipName.toUpperCase();
         if (!normalizedDetected.includes(normalizedChip.replace('-', ''))) {
-          log(`Varování: Firmware je pro ${firmware.chip}, ale detekován ${chipName}`, 'error');
+          log(t('flash_chip_mismatch', { chip: firmware.chip, detected: chipName }), 'error');
         }
       }
 
       // Download firmware binary
-      log('Stahování firmware...', 'info');
+      log(t('flash_downloading'), 'info');
       onStatus?.('downloading');
       const response = await fetch(`/api/firmware/${firmware.id}`);
-      if (!response.ok) throw new Error(`Stažení firmware selhalo: ${response.status}`);
+      if (!response.ok) throw new Error(`Firmware download failed: ${response.status}`);
       const arrayBuffer = await response.arrayBuffer();
-      log(`Firmware stažen (${(arrayBuffer.byteLength / 1024).toFixed(1)} KB)`, 'success');
+      log(t('flash_downloaded', { size: (arrayBuffer.byteLength / 1024).toFixed(1) }), 'success');
 
       // Convert ArrayBuffer to binary string (esptool-js format)
       const bytes = new Uint8Array(arrayBuffer);
@@ -75,7 +76,7 @@ export class Flasher {
 
       // Flash
       const flashOffset = parseInt(firmware.flashOffset || '0x0', 16);
-      log(`Nahrávání na offset 0x${flashOffset.toString(16)}...`, 'info');
+      log(t('flash_writing', { offset: flashOffset.toString(16) }), 'info');
       onStatus?.('flashing');
 
       const fileArray = [{
@@ -96,18 +97,18 @@ export class Flasher {
         },
       });
 
-      log('Firmware úspěšně nahrán!', 'success');
+      log(t('flash_success'), 'success');
       onProgress?.(100);
 
       // Hard reset
-      log('Reset ESP32...', 'info');
+      log(t('flash_resetting'), 'info');
       await this._transport.setDTR(false);
       await this._transport.setRTS(true);
       await new Promise(r => setTimeout(r, 100));
       await this._transport.setRTS(false);
 
       onStatus?.('done');
-      log('ESP32 restartováno.', 'success');
+      log(t('flash_rebooted'), 'success');
     } finally {
       // Clean up transport
       if (this._transport) {

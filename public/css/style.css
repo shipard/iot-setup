@@ -89,6 +89,30 @@ header h1 {
   50% { opacity: 0.3; }
 }
 
+/* Language selector */
+.lang-select {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  min-width: 3.5rem;
+}
+
+.lang-select:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+  color: var(--text-primary);
+}
+
+.lang-select:hover {
+  border-color: var(--text-muted);
+  color: var(--text-primary);
+}
+
 /* Tabs */
 .tabs {
   display: flex;
