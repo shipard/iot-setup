@@ -1,0 +1,5 @@
+firmware/*.bin
+server/firmwares.json
+server/.env
+server/node_modules
+server/package-lock.json
